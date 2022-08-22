@@ -1,2 +1,2 @@
 # websuckers-client
-Basic websockets usage example client to shown in a workshop.
+Basic websockets usage example client to show in a workshop.
