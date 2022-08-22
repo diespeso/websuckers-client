@@ -1,0 +1,10 @@
+const MESSAGE_TYPES = {
+    GREET: 'GREET',
+    GRANT_IDENTIFIER: 'GRANT_IDENTIFIER',
+    TEXT: 'TEXT',
+    BROADCAST: 'BROADCAST',
+};
+
+module.exports = {
+    MESSAGE_TYPES,
+}
