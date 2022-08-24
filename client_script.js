@@ -1,8 +1,11 @@
 const { WebSocket } = require('ws');
+const dotenv = require('dotenv');
 
-const SERVER_URL = 'ws://192.168.1.33:443';
+dotenv.config();
+
+const SERVER_URL = process.env.SERVER_URL;
 const RETRY_CONN_INTERVAL = 2000;
-const DEBUG = true;
+const DEBUG = false;
 const debug = (text) => { if (DEBUG) {console.log(text);} }
 
 const REFUSED_CONN_ERROR_CODE = 'ECONNREFUSED';
