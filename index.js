@@ -10,11 +10,10 @@ const SERVER_URL = process.env.SERVER_URL;
 
 const client = new Client();
 const client1 = new Client();
-const client2 = new Client();
 
 client.connect(SERVER_URL);
 client1.connect(SERVER_URL);
-client2.connect(SERVER_URL);
+
 
 const noise = new NoiseBroadcastClient();
 noise.connect(SERVER_URL);

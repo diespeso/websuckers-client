@@ -1,4 +1,4 @@
-// SCRIPT FOR BROADCASTING ON DEMAND (READING USER INPUT)
+// SCRIPT FOR BROADCASTING ON DEMAND (READING USER INPUT from propmt)
 
 const dotenv = require('dotenv');
 const prompt = require('prompt');
@@ -9,7 +9,6 @@ const { MESSAGE_TYPES } = require('./constants');
 const promptForBroadcast = async () => {
     return new Promise((resolve, reject) => {
         prompt.get(['broadcast'], (err, result) => {
-            // broadcaster.sendBroadcast(result.broadcast);
             if (err) {
                 reject(err);
             }

@@ -12,8 +12,6 @@ const debug = (text) => { if (DEBUG) {console.log(text);} }
 
 const REFUSED_CONN_ERROR_CODE = 'ECONNREFUSED';
 
-// DEFINITION
-
 class Client {
     constructor() {
         this.serverUrl = null;
@@ -53,7 +51,7 @@ class Client {
                 if (data) {
                     if (data.messageType === MESSAGE_TYPES.GRANT_IDENTIFIER) {
                         this.id = data.id;
-                        debug(`this client is now known as ${this.id} by the server`);
+                        console.log(`this client is now known as ${this.id} by the server`);
                         resolve(this);
                     } else {
                         this.handleMessage(data);
@@ -88,6 +86,10 @@ class Client {
             case MESSAGE_TYPES.BROADCAST:
                 debug(`user with id ${data.id} sent a broadcast. `);
                 console.log(`received broadcast: ${data.broadcast} from ${data.id}`);
+                break;
+            case MESSAGE_TYPES.TEXT:
+                debug(`use with id ${data.id} sent a text.`);
+                console.log(`received text: ${data.text} from ${data.text}`);
                 break;
         }
     }

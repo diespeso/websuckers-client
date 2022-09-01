@@ -8,6 +8,9 @@
     "start_script": "nodemon client_script.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "nodemonConfig": {
+    "ignore": ["broadcast_on_demand.js", "client_script.js", "constants.js", "notify_script.js"]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
