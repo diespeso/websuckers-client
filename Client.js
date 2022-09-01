@@ -1,17 +1,16 @@
 const { WebSocket } = require('ws');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const { sendJson, receiveJson } = require('./utils');
 const { MESSAGE_TYPES } = require('./constants');
 
 const RETRY_CONN_INTERVAL = 2000;
-const DEBUG = true;
+const DEBUG = false;
 const debug = (text) => { if (DEBUG) {console.log(text);} }
 
 const REFUSED_CONN_ERROR_CODE = 'ECONNREFUSED';
-
-const SECRET = 'SECRETSTRING';
-
-// DEFINITION
 
 class Client {
     constructor() {
@@ -19,6 +18,7 @@ class Client {
         this.ws = null;
         this.id = null;
         this.connected = false;
+        this.mutedMessageTypes = [];
         console.log('client started.');
     }
 
@@ -32,7 +32,6 @@ class Client {
                 if (err.code === REFUSED_CONN_ERROR_CODE) {
                     console.log(`failed to communicate with the server, retrying after ${RETRY_CONN_INTERVAL} ms...`);
                     this.connected = false;
-                    //reject(err);
                 }
             });
     
@@ -40,7 +39,6 @@ class Client {
                 console.log('connected to server.');
                 this.connected = true;
                 this.sendGreetMessage();
-                // resolve(this);
             });
     
             this.ws.on('close', () => {
@@ -53,7 +51,7 @@ class Client {
                 if (data) {
                     if (data.messageType === MESSAGE_TYPES.GRANT_IDENTIFIER) {
                         this.id = data.id;
-                        debug(`this client is now known as ${this.id} by the server`);
+                        console.log(`this client is now known as ${this.id} by the server`);
                         resolve(this);
                     } else {
                         this.handleMessage(data);
@@ -65,7 +63,7 @@ class Client {
     }
 
     sendGreetMessage() {
-        this.sendMessage(MESSAGE_TYPES.GREET, { secret: SECRET });
+        this.sendMessage(MESSAGE_TYPES.GREET, { secret: process.env.SECRET });
     }
 
     sendMessage(messageType, messageObject) {
@@ -83,11 +81,22 @@ class Client {
     handleMessage(data) {
         debug(`debug> id: ${this.id}`);
         debug(data);
+        if (this.mutedMessageTypes.includes(data.messageType)) return;
         switch (data.messageType) {
             case MESSAGE_TYPES.BROADCAST:
                 debug(`user with id ${data.id} sent a broadcast. `);
-                console.log(`received broadcast: ${data.broadcast}`);
+                console.log(`received broadcast: ${data.broadcast} from ${data.id}`);
                 break;
+            case MESSAGE_TYPES.TEXT:
+                debug(`use with id ${data.id} sent a text.`);
+                console.log(`received text: ${data.text} from ${data.text}`);
+                break;
+        }
+    }
+
+    muteMessageType(messageType) {
+        if (messageType !== MESSAGE_TYPES.GRANT_IDENTIFIER) {
+            this.mutedMessageTypes.push(messageType);
         }
     }
 

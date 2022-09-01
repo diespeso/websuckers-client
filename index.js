@@ -1,18 +1,20 @@
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 const { Client } = require('./Client');
 const { BroadcastClient } = require('./BroadcastClient');
+const { NoiseBroadcastClient } = require('./NoiseBroadcastClient');
 
-const SERVER_URL = 'ws://192.168.1.33:443';
+const SERVER_URL = process.env.SERVER_URL;
 
 const client = new Client();
 const client1 = new Client();
-const client2 = new Client();
 
 client.connect(SERVER_URL);
 client1.connect(SERVER_URL);
-client2.connect(SERVER_URL);
 
-const broadcastClient = new BroadcastClient();
-broadcastClient.connect(SERVER_URL)
-    .then((readyCliente) => {
-        readyCliente.sendBroadcast('testing...');
-    });
+
+const noise = new NoiseBroadcastClient();
+noise.connect(SERVER_URL);
+noise.startNoise();
